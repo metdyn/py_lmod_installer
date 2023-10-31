@@ -33,7 +33,7 @@ class PackageInstaller():
     # ----------------------------------------------------------------------------------------------
 
 
-    def __init__(self, package, package_local_name, root, clean, verbose):
+    def __init__(self, package, package_local_name, root, update, clean, verbose):
 
         # Split package by '/' to get the package name
         self.package_org = package.split('/')[0]
@@ -62,6 +62,15 @@ class PackageInstaller():
                         print(f'Removing {path}')
                     run_os_system_command(f'rm -rf {path}')
             exit(0)
+
+        # If update make sure that the package is already cloned and lua file exists
+        # --------------------------------------------------------------------------
+        if update:
+            if not os.path.isdir(self.path_src):
+                raise Exception(f'Package {self.package_name} not cloned. Cannot update.')
+            if not os.path.isfile(self.path_mod):
+                raise Exception(f'Package {self.package_name} lua file not present. Cannot update.')
+
 
     # ----------------------------------------------------------------------------------------------
 

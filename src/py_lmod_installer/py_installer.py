@@ -22,6 +22,7 @@ package_local_name_help = 'Name of the package referred to locally. Once install
 branch_help = 'Specific branch to checkout of the package'
 root_help = 'Root directory for source, install and modules files'
 clean_help = 'Clean up any previous installation of the package '
+update_help = 'Run with update to reinstall a package but not re-clone and re-install lua file.'
 verbose_help = 'Verbose output'
 
 
@@ -43,6 +44,9 @@ def main():
     # Define the '-r' or '--root' option with a default value.
     parser.add_argument('-r', '--root', default='./', help=root_help)
 
+    # Define the '-u' or '--update' option as a flag.
+    parser.add_argument('-u', '--update', action='store_true', help=update_help)
+
     # Define the '-c' or '--clean' option as a flag.
     parser.add_argument('-c', '--clean', action='store_true', help=clean_help)
 
@@ -56,20 +60,23 @@ def main():
     package_local_name = args.package_local_name
     branch = args.branch
     root = args.root
+    update = args.update
     clean = args.clean
     verbose = args.verbose
 
     # Create the package installer object
-    package_installer = PackageInstaller(package, package_local_name, root, clean, verbose)
+    package_installer = PackageInstaller(package, package_local_name, root, update, clean, verbose)
 
     # Clone the repo
-    package_installer.clone(branch)
+    if not update:
+        package_installer.clone(branch)
 
     # Install package
     package_installer.pip_install()
 
     # Create module file
-    package_installer.create_module_file()
+    if not update:
+        package_installer.create_module_file()
 
 
 # --------------------------------------------------------------------------------------------------
