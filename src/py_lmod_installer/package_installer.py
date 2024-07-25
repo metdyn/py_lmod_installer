@@ -33,7 +33,7 @@ class PackageInstaller():
     # ----------------------------------------------------------------------------------------------
 
 
-    def __init__(self, package, package_local_name, root, update, clean, verbose):
+    def __init__(self, package, package_local_name, root, update, clean, verbose, editable):
 
         # Split package by '/' to get the package name
         self.package_org = package.split('/')[0]
@@ -42,6 +42,7 @@ class PackageInstaller():
 
         # Root directory that will contain src, core, module files
         self.verbose = verbose
+        self.editable = editable
 
         # Absolute root
         self.root = os.path.abspath(root)
@@ -116,16 +117,23 @@ class PackageInstaller():
 
         # Pip options
         pip_options = ''
+        if self.editable:
+            pip_options = '-e'
 
         # Check for a requirements.txt file in the package directory
         requirements_file = os.path.join(self.path_src, 'requirements.txt')
         if os.path.isfile(requirements_file):
-            pip_options = f'-r {requirements_file}'
+            pip_options = pip_options + f' -r {requirements_file}'
+
+        print ('pip_options =', pip_options)
+        exit()
 
         # Perform pip install
         install_command = f'pip install --prefix={self.path_core} --no-cache-dir {pip_options} ' + \
                           f'{self.path_src}'
 
+            
+        
         # Print message if verbose
         if self.verbose:
             print(f'Installing package with: {install_command}')

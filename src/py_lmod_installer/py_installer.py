@@ -53,6 +53,9 @@ def main():
     # Define the '-v' or '--verbose' option as a flag.
     parser.add_argument('-v', '--verbose', action='store_true', help=verbose_help)
 
+    # Define the '-e' or '--editable' option as a flag.
+    parser.add_argument('-e', '--editable', action='store_true', help=verbose_help)
+
     args = parser.parse_args()
 
     # Access the arguments and options
@@ -63,9 +66,10 @@ def main():
     update = args.update
     clean = args.clean
     verbose = args.verbose
-
+    editable = args.editable
+    
     # Create the package installer object
-    package_installer = PackageInstaller(package, package_local_name, root, update, clean, verbose)
+    package_installer = PackageInstaller(package, package_local_name, root, update, clean, verbose, editable)
 
     # Clone the repo
     if not update:
