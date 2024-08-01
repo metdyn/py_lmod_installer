@@ -126,12 +126,10 @@ class PackageInstaller():
             pip_options = pip_options + f' -r {requirements_file}'
 
         print ('pip_options =', pip_options)
-        exit()
 
         # Perform pip install
         install_command = f'pip install --prefix={self.path_core} --no-cache-dir {pip_options} ' + \
                           f'{self.path_src}'
-
             
         
         # Print message if verbose
